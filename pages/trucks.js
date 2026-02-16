@@ -17,6 +17,10 @@ export default function TrucksPage() {
 
     if (!error) setTrucks(data || []);
   }
+  
+  <Link href="/add-vehicle">
+  <button className="add-btn">Add Vehicle</button>
+</Link>
 
   return (
     <div className="container">
