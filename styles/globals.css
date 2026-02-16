@@ -186,3 +186,18 @@ body {
   background: #222;
   border-color: #f33;
 }
+
+.add-btn {
+  background: #900;
+  color: #fff;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.add-btn:hover {
+  background: #c00;
+}

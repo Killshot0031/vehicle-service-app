@@ -2,6 +2,10 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import Link from 'next/link';
 
+<Link href="/add-vehicle">
+  <button className="add-btn">Add Vehicle</button>
+</Link>
+
 export default function Home() {
   const [vehicles, setVehicles] = useState([]);
 
