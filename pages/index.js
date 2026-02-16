@@ -19,14 +19,14 @@ export default function Home() {
       setVehicles(data || []);
     }
   }
-  
-  <Link href="/add-vehicle">
-  <button className="add-btn">Add Vehicle</button>
-</Link>
 
   return (
     <div className="container">
       <h1>All Vehicles</h1>
+
+<Link href="/add-vehicle">
+  <button className="add-btn">Add Vehicle</button>
+</Link>
 
       {vehicles.length === 0 && (
         <p>No vehicles found. Add one to get started.</p>
