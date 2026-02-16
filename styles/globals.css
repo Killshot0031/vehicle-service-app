@@ -153,3 +153,36 @@ body {
   color: #aaa;
 }
 
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 12px;
+  background: #111;
+  border-bottom: 2px solid #900;
+}
+
+.tabs a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 6px 12px;
+}
+
+.tabs a:hover {
+  color: #f33;
+}
+
+.vehicle-card,
+.log-card {
+  background: #111;
+  border: 2px solid #900;
+  padding: 12px;
+  margin: 12px 0;
+  border-radius: 8px;
+}
+
+.vehicle-card:hover {
+  background: #222;
+  border-color: #f33;
+}
