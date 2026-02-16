@@ -1,12 +1,10 @@
 import '../styles/globals.css';
+import NavBar from '../components/NavBar';
 
 export default function MyApp({ Component, pageProps }) {
   return (
     <>
-      <div className="tabs">
-        <a href="/">All</a>
-        <a href="/trucks">Trucks</a>
-      </div>
+      <NavBar />
       <Component {...pageProps} />
     </>
   );
