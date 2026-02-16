@@ -2,6 +2,10 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 
+<Link href={`/add-service/${id}`}>
+  <button className="add-btn">Add Service</button>
+</Link>
+
 export default function VehicleDetails() {
   const router = useRouter();
   const { id } = router.query;

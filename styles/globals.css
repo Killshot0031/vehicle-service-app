@@ -201,3 +201,19 @@ body {
 .add-btn:hover {
   background: #c00;
 }
+
+.form input,
+.form textarea,
+.form select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  background: #111;
+  border: 2px solid #900;
+  border-radius: 6px;
+  color: #fff;
+}
+
+.form textarea {
+  height: 100px;
+}
