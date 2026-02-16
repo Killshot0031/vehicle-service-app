@@ -11,3 +11,13 @@ export default function NavBar() {
     </nav>
   );
 }
+
+<button
+  className="logout-btn"
+  onClick={async () => {
+    await supabase.auth.signOut();
+    window.location.href = '/login';
+  }}
+>
+  Logout
+</button>

@@ -64,6 +64,14 @@ export default function AddService() {
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
         />
+        
+        <input
+  type="text"
+  placeholder="Technician Name"
+  value={technician}
+  onChange={(e) => setTechnician(e.target.value)}
+  required
+/>
 
         <button type="submit" className="add-btn">Save Service</button>
       </form>
