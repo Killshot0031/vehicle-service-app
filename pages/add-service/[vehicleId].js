@@ -10,6 +10,7 @@ export default function AddService() {
   const [mileage, setMileage] = useState('');
   const [cost, setCost] = useState('');
   const [notes, setNotes] = useState('');
+  const [technician, setTechnician] = useState('');
 
   async function handleSubmit(e) {
     e.preventDefault();
