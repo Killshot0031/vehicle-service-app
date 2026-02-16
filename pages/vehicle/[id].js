@@ -1,10 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
-
-<Link href={`/add-service/${id}`}>
-  <button className="add-btn">Add Service</button>
-</Link>
+import Link from 'next/link';
 
 export default function VehicleDetails() {
   const router = useRouter();
@@ -14,10 +11,9 @@ export default function VehicleDetails() {
   const [logs, setLogs] = useState([]);
 
   useEffect(() => {
-    if (id) {
-      fetchVehicle();
-      fetchLogs();
-    }
+    if (!id) return; // prevents build crash
+    fetchVehicle();
+    fetchLogs();
   }, [id]);
 
   async function fetchVehicle() {
@@ -25,7 +21,7 @@ export default function VehicleDetails() {
       .from('vehicles')
       .select('*')
       .eq('id', id)
-      .single();
+      .maybeSingle(); // prevents build crash
 
     setVehicle(data);
   }
@@ -46,6 +42,10 @@ export default function VehicleDetails() {
     <div className="container">
       <h1>{vehicle.name}</h1>
       <p>{vehicle.year} {vehicle.make} {vehicle.model}</p>
+
+      <Link href={`/add-service/${id}`}>
+        <button className="add-btn">Add Service</button>
+      </Link>
 
       <h2>Recent Service</h2>
       {logs.map((log) => (
