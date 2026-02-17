@@ -1,60 +1,88 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { supabase } from '../../lib/supabaseClient';
-import Link from 'next/link';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { supabase } from "../../lib/supabaseClient";
 
-export default function VehicleDetails() {
+export default function VehiclePage() {
   const router = useRouter();
   const { id } = router.query;
 
   const [vehicle, setVehicle] = useState(null);
-  const [logs, setLogs] = useState([]);
+  const [services, setServices] = useState([]);
 
   useEffect(() => {
-    if (!id) return; // prevents build crash
+    if (!id) return;
     fetchVehicle();
-    fetchLogs();
+    fetchServices();
   }, [id]);
 
   async function fetchVehicle() {
-    const { data } = await supabase
-      .from('vehicles')
-      .select('*')
-      .eq('id', id)
-      .maybeSingle(); // prevents build crash
+    const { data, error } = await supabase
+      .from("vehicles")
+      .select("*")
+      .eq("id", id)
+      .single();
 
-    setVehicle(data);
+    if (!error) setVehicle(data);
   }
 
-  async function fetchLogs() {
-    const { data } = await supabase
-      .from('service_logs')
-      .select('*')
-      .eq('vehicle_id', id)
-      .order('created_at', { ascending: false });
+  async function fetchServices() {
+    const { data, error } = await supabase
+      .from("service_logs")
+      .select("*")
+      .eq("vehicle_id", id)
+      .order("created_at", { ascending: false });
 
-    setLogs(data || []);
+    if (!error) setServices(data);
   }
 
-  if (!vehicle) return <p>Loading...</p>;
+  function formatDate(dateString) {
+    return new Date(dateString).toLocaleString("en-US", {
+      dateStyle: "medium",
+      timeStyle: "short"
+    });
+  }
 
   return (
     <div className="container">
-      <h1>{vehicle.name}</h1>
-      <p>{vehicle.year} {vehicle.make} {vehicle.model}</p>
+      {!vehicle ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <h1>{vehicle.year} {vehicle.make} {vehicle.model}</h1>
+          <p><strong>Type:</strong> {vehicle.type}</p>
+          <p><strong>VIN:</strong> {vehicle.vin || "N/A"}</p>
 
-      <Link href={`/add-service/${id}`}>
-        <button className="add-btn">Add Service</button>
-      </Link>
+          <button
+            className="add-btn"
+            onClick={() => router.push(`/add-service/${id}`)}
+          >
+            Add Service
+          </button>
 
-      <h2>Recent Service</h2>
-      {logs.map((log) => (
-        <div key={log.id} className="log-card">
-          <p><strong>{log.service_type}</strong></p>
-          <p>Mileage: {log.mileage}</p>
-          <p>{log.notes}</p>
-        </div>
-      ))}
+          <h2>Service History</h2>
+
+          {services.length === 0 ? (
+            <p>No service records yet.</p>
+          ) : (
+            <div className="service-list">
+              {services.map((service) => (
+                <div key={service.id} className="service-card">
+                  <p><strong>Service:</strong> {service.service_type}</p>
+                  <p><strong>Mileage:</strong> {service.mileage}</p>
+                  {service.cost && (
+                    <p><strong>Cost:</strong> ${service.cost}</p>
+                  )}
+                  <p><strong>Technician:</strong> {service.technician_name}</p>
+                  <p><strong>Date:</strong> {formatDate(service.created_at)}</p>
+                  {service.notes && (
+                    <p><strong>Notes:</strong> {service.notes}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }
