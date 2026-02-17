@@ -260,10 +260,14 @@ body {
   background: #666;
 }
 
-.service-card { 
-  background: #ffffff; 
-  padding: 14px; 
-  margin-bottom: 16px; 
+.service-card {
+  background: #1e1e1e;        /* dark gray */
+  padding: 14px;
+  margin-bottom: 16px;
   border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  border: 1px solid #333;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  color: #f0f0f0;             /* readable text */
 }
+
+
