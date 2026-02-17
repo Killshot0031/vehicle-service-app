@@ -1,35 +1,39 @@
-import { useState } from 'react';
-import { useRouter } from 'next/router';
-import { supabase } from '../../lib/supabaseClient';
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { supabase } from "../../lib/supabaseClient";
 
 export default function AddService() {
   const router = useRouter();
   const { vehicleId } = router.query;
 
-  const [serviceType, setServiceType] = useState('');
-  const [mileage, setMileage] = useState('');
-  const [cost, setCost] = useState('');
-  const [notes, setNotes] = useState('');
-  const [technician, setTechnician] = useState('');
+  const [serviceType, setServiceType] = useState("");
+  const [mileage, setMileage] = useState("");
+  const [cost, setCost] = useState("");
+  const [notes, setNotes] = useState("");
+  const [technician, setTechnician] = useState("");
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const { data, error } = await supabase
-      .from('service_logs')
-      .insert([
-        {
-          vehicle_id: vehicleId,
-          service_type: serviceType,
-          mileage: parseInt(mileage),
-          cost: cost ? parseFloat(cost) : null,
-          notes
-        }
-      ]);
+    const { data, error } = await supabase.from("service_logs").insert([
+      {
+        vehicle_id: vehicleId,
+        service_type: serviceType,
+        mileage: parseInt(mileage),
+        cost: cost ? parseFloat(cost) : null,
+        notes,
+        technician_name: technician,
+        created_at: new Date().toISOString() // timestamp added
+      }
+    ]);
 
-    if (!error) {
-      router.push(`/vehicle/${vehicleId}`);
+    if (error) {
+      console.error(error);
+      alert("Error saving service");
+      return;
     }
+
+    router.push(`/vehicle/${vehicleId}`);
   }
 
   return (
@@ -60,21 +64,23 @@ export default function AddService() {
           onChange={(e) => setCost(e.target.value)}
         />
 
+        <input
+          type="text"
+          placeholder="Technician Name"
+          value={technician}
+          onChange={(e) => setTechnician(e.target.value)}
+          required
+        />
+
         <textarea
           placeholder="Notes (optional)"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
         />
-        
-        <input
-  type="text"
-  placeholder="Technician Name"
-  value={technician}
-  onChange={(e) => setTechnician(e.target.value)}
-  required
-/>
 
-        <button type="submit" className="add-btn">Save Service</button>
+        <button type="submit" className="add-btn">
+          Save Service
+        </button>
       </form>
     </div>
   );
