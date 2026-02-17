@@ -11,32 +11,32 @@ export default function VehiclePage() {
 
   useEffect(() => {
     if (!id) return;
-    fetchVehicle();
-    fetchServices();
+    loadVehicle();
+    loadServices();
   }, [id]);
 
-  async function fetchVehicle() {
-    const { data, error } = await supabase
+  async function loadVehicle() {
+    const { data } = await supabase
       .from("vehicles")
       .select("*")
       .eq("id", id)
       .single();
 
-    if (!error) setVehicle(data);
+    setVehicle(data);
   }
 
-  async function fetchServices() {
-    const { data, error } = await supabase
+  async function loadServices() {
+    const { data } = await supabase
       .from("service_logs")
       .select("*")
       .eq("vehicle_id", id)
       .order("created_at", { ascending: false });
 
-    if (!error) setServices(data);
+    setServices(data || []);
   }
 
-  function formatDate(dateString) {
-    return new Date(dateString).toLocaleString("en-US", {
+  function formatDate(date) {
+    return new Date(date).toLocaleString("en-US", {
       dateStyle: "medium",
       timeStyle: "short"
     });
@@ -50,7 +50,6 @@ export default function VehiclePage() {
         <>
           <h1>{vehicle.year} {vehicle.make} {vehicle.model}</h1>
           <p><strong>Type:</strong> {vehicle.type}</p>
-          <p><strong>VIN:</strong> {vehicle.vin || "N/A"}</p>
 
           <button
             className="add-btn"
@@ -62,21 +61,17 @@ export default function VehiclePage() {
           <h2>Service History</h2>
 
           {services.length === 0 ? (
-            <p>No service records yet.</p>
+            <p>No services yet.</p>
           ) : (
             <div className="service-list">
-              {services.map((service) => (
-                <div key={service.id} className="service-card">
-                  <p><strong>Service:</strong> {service.service_type}</p>
-                  <p><strong>Mileage:</strong> {service.mileage}</p>
-                  {service.cost && (
-                    <p><strong>Cost:</strong> ${service.cost}</p>
-                  )}
-                  <p><strong>Technician:</strong> {service.technician_name}</p>
-                  <p><strong>Date:</strong> {formatDate(service.created_at)}</p>
-                  {service.notes && (
-                    <p><strong>Notes:</strong> {service.notes}</p>
-                  )}
+              {services.map((s) => (
+                <div key={s.id} className="service-card">
+                  <p><strong>Service:</strong> {s.service_type}</p>
+                  <p><strong>Mileage:</strong> {s.mileage}</p>
+                  {s.cost && <p><strong>Cost:</strong> ${s.cost}</p>}
+                  <p><strong>Technician:</strong> {s.technician_name}</p>
+                  <p><strong>Date:</strong> {formatDate(s.created_at)}</p>
+                  {s.notes && <p><strong>Notes:</strong> {s.notes}</p>}
                 </div>
               ))}
             </div>
